@@ -18,11 +18,12 @@ Create Database Database_01
 Use Database_01
 
 
-#Create Table With name Sales_Data_Final
+# 01. Load the given dataset into snowflake with a primary key to Order Date column.
+use Database_01;
 Create or replace Table Sales_Data_Final(
 Order_id varchar(20),
-Order_Date date,
-Ship_date date,
+Order_Date varchar primary key,
+Ship_date varchar(20),
 Ship_mode Varchar(20),
 Customer_name Varchar(50),
 Segment Varchar(20),
@@ -42,47 +43,48 @@ Shipping_Cost number(10,2),
 Order_Priority Varchar(50));
 
 
-Select * From Sales_Data_Final;
+# 02. Change the Primary key to Order Id Column.
+Alter table Sales_Data_Final
+Drop Primary Key;
 
-
-# 01. Set Primary Key
 Alter table sales_Data_Final
 add  primary key (ORDER_ID);
 
 
-# 02. CHECK THE ORDER DATE AND SHIP DATE TYPE AND THINK IN WHICH DATA TYPE YOU HAVE TO CHANGE.
-# Before Uploading the file I changed the date format in Excel Workbook
+
+# 03. Check the data type for Order date and Ship date and mention in what data type it should be?
+Describe table Sales_data_final;
+# Since its datatype is Varchar but its datatype should be 'DATE'
 
 
-# 03 EXTACT THE LAST NUMBER AFTER THE - AND CREATE OTHER COLUMN AND UPDATE IT.
-Select *, split_part(order_id,'-',3) as Last_order_ID From Sales_Data_Final;
+# 04 Create a new column called order_extract and extract the number after the last ‘–‘from Order ID column.;
+Select *, split_part(order_id,'-',3) as order_extract From Sales_Data_Final;
 
 
-# 04 FLAG ,IF DISCOUNT IS GREATER THEN 0 THEN  YES ELSE FALSE AND PUT IT IN NEW COLUMN FRO EVERY ORDER ID.
+# 05 Create a new column called Discount Flag and categorize it based on discount. Use ‘Yes’ if the discount is greater than zero else ‘No’.
 Select *,
 Case 
     When discount > 0 Then 'YES' 
     Else 'NO'
-End as FRO
+End as Discount_Flag
 From Sales_Data_Final;
 
 
-# 05 FIND OUT THE FINAL PROFIT AND PUT IT IN COLUMN FOR EVERY ORDER ID.
-Select *, (profit - Shipping_cost) as Final_Profit From sales_data_final;
+# 06 Create a new column called process days and calculate how many days it takes for each order id to process from the order to its shipment.
+Select *, (ship_date-Order_Date) as Process_days From Sales_data_Final;
 
 
-# 06 FIND OUT HOW MUCH DAYS TAKEN FOR EACH ORDER TO PROCESS FOR THE SHIPMENT FOR EVERY ORDER ID.
-Select *, (ship_date-Order_Date) as Day_taken From Sales_data_Final;
+# 07 Create a new column called Rating and then based on the Process dates give rating like given below.
+# a. If process days less than or equal to 3days then rating should be 5
+# b. If process days are greater than 3 and less than or equal to 6 then rating should be 4
+# c. If process days are greater than 6 and less than or equal to 10 then rating should be 3
+# d. If process days are greater than 10 then the rating should be 2.
 
-
-
-# 07 FLAG THE PROCESS DAY AS BY RATING IF IT TAKES LESS OR EQUAL 3  DAYS MAKE 5,LESS OR EQUAL 
-# THAN 6 DAYS BUT MORE THAN 3 MAKE 4,LESS THAN 10 BUT MORE THAN 6 MAKE 3,MORE THAN 10 MAKE IT 2 FOR EVERY ORDER ID.
 Select *,                
 Case
-    When (ship_date-Order_Date) <= 3 Then '*****'
-    When (ship_date-Order_Date) <=6 and (ship_date-Order_Date) > 3 Then '****'
-    When (ship_date-Order_Date) <10 and (ship_date-Order_Date) > 6 Then '***'
-    Else '**'
+    When (ship_date-Order_Date) <= 3 Then 5
+    When (ship_date-Order_Date) > 3 and (ship_date-Order_Date) <=6  Then 4
+    When (ship_date-Order_Date) > 6 and (ship_date-Order_Date) <=10  Then 3
+    Else 2
 End As Rating
 From Sales_Data_Final;
