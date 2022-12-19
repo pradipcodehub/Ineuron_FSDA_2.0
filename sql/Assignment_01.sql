@@ -1,3 +1,24 @@
+/*
+--------------------------------
+
+---------Assignment_01----------
+
+--------------------------------
+
+Author :- Ineuron
+Tool Used :- Snowflake
+
+*/
+
+#Create db With name Database_01
+Create Database Database_01
+
+
+# Command to use this db
+Use Database_01
+
+
+#Create Table With name Sales_Data_Final
 Create or replace Table Sales_Data_Final(
 Order_id varchar(20),
 Order_Date date,
@@ -20,7 +41,7 @@ Profit number(10,2),
 Shipping_Cost number(10,2),
 Order_Priority Varchar(50));
 
-Describe table Sales_data_final;
+
 Select * From Sales_Data_Final;
 
 
