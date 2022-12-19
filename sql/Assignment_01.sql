@@ -30,7 +30,7 @@ add  primary key (ORDER_ID);
 
 
 # 02. CHECK THE ORDER DATE AND SHIP DATE TYPE AND THINK IN WHICH DATA TYPE YOU HAVE TO CHANGE.
-# Before Uploading the file I change the date format in Excel Workbook
+# Before Uploading the file I changed the date format in Excel Workbook
 
 
 # 03 EXTACT THE LAST NUMBER AFTER THE - AND CREATE OTHER COLUMN AND UPDATE IT.
