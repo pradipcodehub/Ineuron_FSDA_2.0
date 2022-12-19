@@ -10,7 +10,7 @@ Tool Used :- Snowflake
 
 */
 
-#Create db With name Database_01
+# Create db With name Database_01
 Create Database Database_01
 
 
